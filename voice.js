@@ -2,7 +2,6 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let isListening = false;
-let autoListenTimer = null;
 
 if (SpeechRecognition) {
   recognition = new SpeechRecognition();
@@ -38,17 +37,27 @@ if (SpeechRecognition) {
 function updateMicUI(listening) {
   const micBtn = document.getElementById("micBtn");
   const callStatus = document.getElementById("callStatus");
+  const micStatusText = document.getElementById("micStatusText");
+  const audioWave = document.getElementById("audioWave");
+
   if (micBtn) {
     if (listening) {
       micBtn.classList.add("listening");
-      micBtn.textContent = "🎙️ Listening...";
+      micBtn.setAttribute("title", "Listening...");
     } else {
       micBtn.classList.remove("listening");
-      micBtn.textContent = "🎤 Speak Answer";
+      micBtn.setAttribute("title", "Toggle Microphone");
     }
   }
-  if (callStatus) {
-    callStatus.textContent = listening ? "Listening for your response..." : "Click mic or type answer below";
+
+  if (listening) {
+    if (callStatus) callStatus.textContent = "Listening for your response...";
+    if (micStatusText) micStatusText.textContent = "🎙️ Listening... Speak now";
+    if (audioWave) audioWave.classList.add("active");
+  } else {
+    if (callStatus && window.isCallActive) callStatus.textContent = "Call in progress...";
+    if (micStatusText) micStatusText.textContent = "Press mic, type, or use keypad";
+    if (audioWave && !window.speechSynthesis?.speaking) audioWave.classList.remove("active");
   }
 }
 
@@ -59,6 +68,7 @@ function stopListening() {
 
 function autoStartListening() {
   if (!SpeechRecognition) return;
+  if (!window.isCallActive) return; // Only listen during an active call
   if (isListening) return;
   const langSelect = document.getElementById("langSelect");
   if (recognition) {
@@ -73,7 +83,7 @@ function autoStartListening() {
 
 function toggleListening() {
   if (!SpeechRecognition) {
-    alert("Web Speech API is not supported in this browser. You can type your response instead.");
+    alert("Web Speech API is not supported in this browser. You can type your response or use keypad instead.");
     return;
   }
   if (isListening) {
@@ -85,6 +95,12 @@ function toggleListening() {
 
 // Speech Synthesis with completion callback
 function speakReply(text, onEndCallback) {
+  const micStatusText = document.getElementById("micStatusText");
+  const audioWave = document.getElementById("audioWave");
+
+  if (micStatusText) micStatusText.textContent = "🔊 Agent Speaking...";
+  if (audioWave) audioWave.classList.add("active");
+
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel(); // Cancel active speech
     const cleanText = text.replace(/<[^>]*>/g, ""); // strip HTML
@@ -96,7 +112,8 @@ function speakReply(text, onEndCallback) {
     const finish = () => {
       if (!hasEnded) {
         hasEnded = true;
-        if (onEndCallback) onEndCallback();
+        if (audioWave && !isListening) audioWave.classList.remove("active");
+        if (onEndCallback && window.isCallActive) onEndCallback();
       }
     };
 
@@ -107,7 +124,8 @@ function speakReply(text, onEndCallback) {
     };
 
     window.speechSynthesis.speak(utterance);
-  } else if (onEndCallback) {
+  } else if (onEndCallback && window.isCallActive) {
+    if (audioWave) audioWave.classList.remove("active");
     onEndCallback();
   }
 }

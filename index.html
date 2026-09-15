@@ -2,52 +2,265 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Swara-Marg — Voice Assistant</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swara-Marg — IVR Skill & Employment Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Swara-Marg — स्वर-मार्ग</h1>
-<div class="subtitle">Guided Voice Assistant: Step-by-step spoken conversation for training & job matching.</div>
+<div class="app-container">
+  
+  <!-- LEFT COLUMN: Main App Header, Transcript & Dashboard -->
+  <main class="left-panel">
+    <header class="main-header">
+      <div class="brand-row">
+        <div class="brand-logo">SM</div>
+        <div>
+          <h1>Swara-Marg <span class="hindi-title">स्वर-मार्ग</span></h1>
+          <p class="subtitle">AI Voice & IVR Skill Matching Assistant (MoSJE / GIA Portal)</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <div class="lang-selector-wrap">
+          <label for="langSelect">Language / भाषा:</label>
+          <select id="langSelect" onchange="onLanguageChange()" title="Select Language">
+            <option value="en-IN">English (en-IN)</option>
+            <option value="hi-IN">हिंदी (hi-IN)</option>
+          </select>
+        </div>
+      </div>
+    </header>
 
-<!-- Live Call & Step Indicator Banner -->
-<div class="call-header">
-  <div>
-    <span id="stepBadge" class="step-badge">Step 1 of 4</span>
-    <span id="callStatus" class="call-status">Click Speak Answer or listen</span>
-  </div>
-  <div class="lang-selector">
-    <select id="langSelect" onchange="onLanguageChange()" title="Select Language">
-      <option value="en-IN">English (en-IN)</option>
-      <option value="hi-IN">हिंदी (hi-IN)</option>
-    </select>
-  </div>
+    <!-- Top Banner Stats (District Overview) -->
+    <section class="stats-banner">
+      <div class="stat-card">
+        <span class="stat-label">ACTIVE ENROLLMENTS</span>
+        <span class="stat-value">4,210</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">PLACED (DAY-90)</span>
+        <span class="stat-value success">3,850 <small>(91%)</small></span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">LOCAL VACANCIES</span>
+        <span class="stat-value highlight">842</span>
+      </div>
+    </section>
+
+    <!-- Live Call Transcript Section -->
+    <section class="transcript-section">
+      <div class="section-header">
+        <h2>Live Call Transcript</h2>
+        <span id="stepBadge" class="step-badge">Ready to Call</span>
+      </div>
+      <div id="chatlog" class="chatlog-container">
+        <!-- Transcript cards populate here -->
+        <div class="system-welcome-card">
+          <div class="welcome-icon">☎️</div>
+          <h3>Welcome to Swara-Marg IVR Voice Service</h3>
+          <p>Press <strong>"Call Swara-Marg"</strong> on the phone interface to start your automated voice registration and skill assessment.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Officer Dashboard Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <h2>Officer Dashboard <small>(Session Submissions)</small></h2>
+      </div>
+      <div class="table-responsive">
+        <table id="dashTable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Skills</th>
+              <th>District</th>
+              <th>Matched Course</th>
+              <th>Job Openings</th>
+            </tr>
+          </thead>
+          <tbody id="dashBody"></tbody>
+        </table>
+        <div id="emptyNote" class="empty">No completed call submissions in this session.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- RIGHT COLUMN: Realistic Phone Call IVR Interface -->
+  <aside class="right-panel">
+    <div class="phone-frame">
+      <!-- Speaker grill & camera notch -->
+      <div class="phone-notch">
+        <div class="phone-speaker"></div>
+        <div class="phone-camera"></div>
+      </div>
+
+      <!-- Phone Screen -->
+      <div class="phone-screen">
+        
+        <!-- Status Bar -->
+        <div class="phone-status-bar">
+          <span class="status-time" id="statusClock">09:41</span>
+          <div class="status-icons">
+            <span class="icon-signal">📶</span>
+            <span class="icon-wifi">📡</span>
+            <span class="icon-battery">🔋</span>
+          </div>
+        </div>
+
+        <!-- Phone Header -->
+        <div class="phone-header">
+          <div class="phone-title">Swara-Marg IVR</div>
+          <div class="phone-subtitle">Govt. Skill Assistant</div>
+        </div>
+
+        <!-- Call Content Area -->
+        <div class="phone-body">
+          
+          <!-- Idle / Ready Call View -->
+          <div id="idleCallScreen" class="call-state-screen active">
+            <div class="avatar-large">
+              <div class="avatar-ring"></div>
+              <span>SM</span>
+            </div>
+            <h2 class="caller-name">Swara-Marg Voice Agent</h2>
+            <p class="call-prompt">Click below to start automated call</p>
+            
+            <button id="startCallBtn" class="call-start-pill" onclick="startCall()">
+              <span class="phone-icon-green">📞</span> Call Swara-Marg
+            </button>
+          </div>
+
+          <!-- Active Call Screen -->
+          <div id="activeCallScreen" class="call-state-screen">
+            <div class="active-call-header">
+              <div class="call-pulse-dot"></div>
+              <span id="callStatus" class="call-status-text">Call in progress...</span>
+            </div>
+            
+            <div id="callTimer" class="call-timer">00:00</div>
+
+            <!-- Current Agent Audio / Speech Display -->
+            <div class="agent-live-box">
+              <div class="agent-avatar-sm">🔊</div>
+              <div class="agent-speech-content">
+                <span class="speaker-label">Swara-Marg Agent</span>
+                <p id="liveQuestionText" class="live-question">Initializing call...</p>
+              </div>
+            </div>
+
+            <!-- Visual Sound Wave / Mic Status Bar -->
+            <div class="mic-visualizer-container">
+              <div id="audioWave" class="audio-wave">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <span id="micStatusText" class="mic-status-text">Connecting...</span>
+            </div>
+
+            <!-- Final Recommendation Result Card Overlay (Inside Phone) -->
+            <div id="resultCard" class="result-card">
+              <div class="result-badge">✓ RECOMMENDATION GENERATED</div>
+              <h3 id="cardHeader">🎓 Recommended Skill Course</h3>
+              <div id="cardCourse" class="course-title"></div>
+              <div id="cardCenter" class="detail-item"></div>
+              <div id="cardDemand" class="detail-item"></div>
+              <button class="call-again-btn" onclick="startCall()">Start New Call</button>
+            </div>
+          </div>
+
+          <!-- Call Summary Card (When Call Ended) -->
+          <div id="endedCallScreen" class="call-state-screen">
+            <div class="ended-icon">☎️</div>
+            <h3>Call Ended</h3>
+            <div id="endedDuration" class="ended-detail">Duration: 00:00</div>
+            <div id="endedSteps" class="ended-detail">Step reached: 1/4</div>
+            <button class="call-again-btn" onclick="startCall()">Start New Call</button>
+          </div>
+
+        </div>
+
+        <!-- Keypad & Input Controls Footer -->
+        <div class="phone-footer">
+          
+          <!-- Numeric IVR Keypad -->
+          <div class="phone-keypad">
+            <button class="key-btn" onclick="onKeypadPress('1')">
+              <span class="num">1</span>
+              <span class="sub" id="keySub1">YES</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('2')">
+              <span class="num">2</span>
+              <span class="sub" id="keySub2">NO</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('3')">
+              <span class="num">3</span>
+              <span class="sub">DEF</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('4')">
+              <span class="num">4</span>
+              <span class="sub">GHI</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('5')">
+              <span class="num">5</span>
+              <span class="sub">JKL</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('6')">
+              <span class="num">6</span>
+              <span class="sub">MNO</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('7')">
+              <span class="num">7</span>
+              <span class="sub">PQRS</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('8')">
+              <span class="num">8</span>
+              <span class="sub">TUV</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('9')">
+              <span class="num">9</span>
+              <span class="sub">WXYZ</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('*')">
+              <span class="num">*</span>
+              <span class="sub"></span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('0')">
+              <span class="num">0</span>
+              <span class="sub">+</span>
+            </button>
+            <button class="key-btn" onclick="onKeypadPress('#')">
+              <span class="num">#</span>
+              <span class="sub"></span>
+            </button>
+          </div>
+
+          <!-- Secondary / Fallback Text Input & Mic Control Row -->
+          <div class="phone-input-row">
+            <input id="userInput" type="text" placeholder="Type answer or speak..." />
+            <button id="sendBtn" class="send-btn" onclick="handleSend()" title="Send Answer">Send</button>
+          </div>
+
+          <!-- Action Buttons Bar (Mic & Call End) -->
+          <div class="phone-call-actions">
+            <button id="micBtn" class="action-circle mic-circle" onclick="toggleListening()" title="Toggle Microphone">
+              🎙️
+            </button>
+            <button id="endCallBtn" class="action-circle end-circle" onclick="endCall()" title="End Call">
+              🔴
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
 </div>
-
-<div id="chatlog"></div>
-
-<!-- Large Text Recommendation Card (Step 5 Result Backup) -->
-<div id="resultCard" class="result-card">
-  <h3 id="cardHeader">🎓 Recommended Skill Course & Jobs</h3>
-  <div id="cardCourse" class="course-title"></div>
-  <div id="cardCenter" class="detail-item"></div>
-  <div id="cardDemand" class="detail-item"></div>
-</div>
-
-<div class="inputrow">
-  <input id="userInput" type="text" placeholder="Type your answer or use microphone..." />
-  <button id="micBtn" class="mic-btn" type="button" onclick="toggleListening()" title="Voice Input">🎤 Speak Answer</button>
-  <button id="sendBtn" class="send-btn" onclick="handleSend()">Send Answer</button>
-</div>
-
-<h2>Officer Dashboard (Session Submissions)</h2>
-<table id="dashTable">
-  <thead>
-    <tr><th>Time</th><th>Skills</th><th>District</th><th>Matched Course</th><th>Job Demand</th></tr>
-  </thead>
-  <tbody id="dashBody"></tbody>
-</table>
-<div id="emptyNote" class="empty">No submissions yet.</div>
 
 <script src="data.js"></script>
 <script src="matching.js"></script>

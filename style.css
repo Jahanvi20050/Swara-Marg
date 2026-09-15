@@ -1,135 +1,859 @@
-* { box-sizing: border-box; }
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 20px 16px 60px;
-  background: #f4f6f4;
-  color: #1a1a1a;
-}
-h1 { font-size: 24px; margin-bottom: 2px; color: #0a4028; }
-.subtitle { color: #555; font-size: 14px; margin-bottom: 16px; }
+/* ---- Swara-Marg IVR Design Tokens & Base Styles ---- */
+:root {
+  --bg-main: #0b0f19;
+  --panel-bg: #131b2e;
+  --card-bg: #1c273e;
+  --card-border: #2a3854;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --primary-green: #10b981;
+  --primary-green-dark: #059669;
+  --primary-green-glow: rgba(16, 185, 129, 0.25);
+  
+  --accent-blue: #38bdf8;
+  --danger-red: #ef4444;
+  --danger-red-dark: #dc2626;
 
-/* Call Header / Step Banner */
-.call-header {
-  background: #10603f;
-  color: #ffffff;
-  padding: 14px 16px;
-  border-radius: 10px;
-  margin-bottom: 16px;
+  --phone-body: #0d1322;
+  --phone-bezel: #1a2336;
+  --phone-screen: #0f172a;
+  --key-bg: #1e293b;
+  --key-hover: #334155;
+  --key-active: #475569;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 20px;
+  line-height: 1.5;
+}
+
+/* App Container (Two Column Layout) */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .app-container {
+    grid-template-columns: 1fr 420px;
+  }
+}
+
+/* ---- LEFT PANEL ---- */
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-header {
+  background: var(--panel-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  gap: 16px;
 }
-.step-badge {
-  background: #ffffff;
-  color: #10603f;
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+  color: #fff;
+  font-weight: 800;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--primary-green-glow);
+}
+
+.main-header h1 {
+  font-size: 22px;
   font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hindi-title {
+  color: var(--primary-green);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.subtitle {
+  color: var(--text-secondary);
   font-size: 13px;
+  margin-top: 2px;
+}
+
+.lang-selector-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card-bg);
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+}
+
+.lang-selector-wrap label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.lang-selector-wrap select {
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Banner Stats */
+.stats-banner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stat-value.success {
+  color: var(--primary-green);
+}
+
+.stat-value.highlight {
+  color: var(--accent-blue);
+}
+
+.stat-value small {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Transcript Section */
+.transcript-section {
+  background: var(--panel-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.step-badge {
+  background: var(--card-bg);
+  color: var(--primary-green);
+  border: 1px solid var(--primary-green);
   padding: 4px 10px;
   border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.chatlog-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+}
+
+.chatlog-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatlog-container::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 4px;
+}
+
+.system-welcome-card {
+  text-align: center;
+  padding: 32px 16px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px dashed var(--card-border);
+  border-radius: 12px;
+  margin: auto 0;
+}
+
+.welcome-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.system-welcome-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.system-welcome-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Transcript Message Cards */
+.msg {
+  padding: 12px 16px;
+  border-radius: 14px;
+  max-width: 85%;
+  font-size: 14px;
+  line-height: 1.4;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg.bot {
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.msg.user {
+  background: var(--primary-green-dark);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+.msg.bot .msg-header { color: var(--primary-green); }
+.msg.user .msg-header { color: #d1fae5; }
+
+/* Dashboard Section */
+.dashboard-section {
+  background: var(--panel-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+th {
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--card-border);
+  color: var(--text-primary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.empty {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ---- RIGHT PANEL: SMARTPHONE MOCKUP ---- */
+.right-panel {
+  display: flex;
+  justify-content: center;
+}
+
+.phone-frame {
+  width: 100%;
+  max-width: 380px;
+  height: 740px;
+  background: var(--phone-bezel);
+  border-radius: 44px;
+  padding: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 2px #2a354d;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.phone-notch {
+  width: 120px;
+  height: 20px;
+  background: #000;
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.phone-speaker {
+  width: 40px;
+  height: 4px;
+  background: #334155;
+  border-radius: 2px;
+}
+
+.phone-camera {
+  width: 8px;
+  height: 8px;
+  background: #1e293b;
+  border-radius: 50%;
+}
+
+.phone-screen {
+  flex: 1;
+  background: var(--phone-screen);
+  border-radius: 34px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Status Bar */
+.phone-status-bar {
+  padding: 14px 20px 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.status-icons {
+  display: flex;
+  gap: 4px;
+  font-size: 10px;
+}
+
+/* Phone Header */
+.phone-header {
+  text-align: center;
+  padding: 6px 16px 10px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.phone-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.phone-subtitle {
+  font-size: 11px;
+  color: var(--primary-green);
+  font-weight: 500;
+}
+
+/* Phone Body / Screens */
+.phone-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: auto;
+}
+
+.call-state-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.call-state-screen.active {
+  display: flex;
+}
+
+/* Idle Screen */
+.avatar-large {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: -6px;
+  border: 2px dashed var(--primary-green);
+  border-radius: 50%;
+  animation: spin 12s linear infinite;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.caller-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.call-prompt {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.call-start-pill {
+  background: var(--primary-green);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 16px var(--primary-green-glow);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.call-start-pill:hover {
+  background: var(--primary-green-dark);
+  transform: translateY(-2px);
+}
+
+/* Active Call Screen */
+.active-call-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.call-pulse-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--primary-green);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--primary-green-glow);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.call-status-text {
+  font-size: 12px;
+  color: var(--primary-green);
+  font-weight: 600;
+}
+
+.call-timer {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+/* Agent Live Box inside Phone */
+.agent-live-box {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 12px;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.agent-avatar-sm {
+  font-size: 18px;
+  background: var(--primary-green-glow);
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.agent-speech-content {
+  flex: 1;
+}
+
+.speaker-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary-green);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.call-status {
+
+.live-question {
   font-size: 13px;
-  opacity: 0.95;
-}
-.lang-selector select {
-  padding: 6px 10px;
-  font-size: 13px;
-  border: none;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #10603f;
-  font-weight: 600;
-  cursor: pointer;
+  color: #f1f5f9;
+  font-weight: 500;
+  margin-top: 2px;
 }
 
-#chatlog {
-  border: 1px solid #dcdcdc;
-  background: #ffffff;
-  border-radius: 10px;
-  min-height: 160px;
-  max-height: 380px;
-  overflow-y: auto;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.msg { padding: 10px 12px; margin-bottom: 10px; border-radius: 8px; font-size: 15px; line-height: 1.5; }
-.msg.user { background: #e8f0fe; color: #1a1a1a; margin-left: 20%; border-left: 4px solid #1a73e8; }
-.msg.bot { background: #e6f4ea; color: #0a4028; margin-right: 15%; border-left: 4px solid #10603f; }
-.msg b { font-weight: 600; }
-
-/* Large Recommendation Backup Card */
-.result-card {
-  display: none;
-  background: #ffffff;
-  border: 2px solid #10603f;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 12px rgba(16,96,63,0.15);
-}
-.result-card.active { display: block; }
-.result-card h3 { margin-top: 0; color: #10603f; font-size: 18px; margin-bottom: 10px; }
-.result-card .course-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
-.result-card .detail-item { font-size: 15px; color: #444; margin-bottom: 6px; }
-
-/* Voice Input Controls */
-.inputrow { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
-.inputrow input {
-  flex: 1;
-  min-width: 200px;
-  padding: 12px 14px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-.mic-btn {
-  padding: 12px 18px;
-  font-size: 15px;
-  font-weight: 600;
-  background: #ffffff;
-  color: #10603f;
-  border: 2px solid #10603f;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+/* Mic Visualizer Animation */
+.mic-visualizer-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 6px;
-}
-.mic-btn.listening {
-  background: #fce8e6;
-  color: #c5221f;
-  border-color: #c5221f;
-  animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.02); }
-  100% { opacity: 1; transform: scale(1); }
+  margin-top: 4px;
 }
 
-.send-btn {
-  padding: 12px 20px;
-  font-size: 15px;
+.audio-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+
+.audio-wave span {
+  width: 3px;
+  height: 6px;
+  background: var(--primary-green);
+  border-radius: 2px;
+  transition: height 0.2s;
+}
+
+.audio-wave.active span {
+  animation: wave 0.8s infinite ease-in-out alternate;
+}
+
+.audio-wave.active span:nth-child(1) { animation-delay: 0.1s; }
+.audio-wave.active span:nth-child(2) { animation-delay: 0.3s; }
+.audio-wave.active span:nth-child(3) { animation-delay: 0.2s; }
+.audio-wave.active span:nth-child(4) { animation-delay: 0.4s; }
+.audio-wave.active span:nth-child(5) { animation-delay: 0.15s; }
+
+@keyframes wave {
+  0% { height: 4px; }
+  100% { height: 18px; }
+}
+
+.mic-status-text {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Result Card Inside Phone Screen */
+.result-card {
+  display: none;
+  background: #111c2e;
+  border: 1px solid var(--primary-green);
+  border-radius: 14px;
+  padding: 14px;
+  width: 100%;
+  text-align: left;
+  margin-top: 8px;
+  animation: fadeIn 0.4s ease;
+}
+
+.result-card.active {
+  display: block;
+}
+
+.result-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--primary-green);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.result-card h3 {
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.course-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 6px;
+}
+
+.detail-item {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.call-again-btn {
+  margin-top: 10px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--primary-green);
   font-weight: 600;
-  background: #10603f;
-  color: #ffffff;
-  border: none;
+  font-size: 12px;
+  padding: 8px;
   border-radius: 8px;
   cursor: pointer;
 }
-.send-btn:disabled { background: #888; cursor: default; }
 
-h2 { font-size: 16px; border-top: 1px solid #ddd; padding-top: 20px; color: #444; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; border-radius: 6px; overflow: hidden; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
-th { color: #555; font-weight: 600; background: #f0f4f1; }
-.empty { color: #888; font-size: 13px; font-style: italic; margin-top: 8px; }
+/* Ended Call Screen */
+.ended-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.call-state-screen h3 {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.ended-detail {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+/* Phone Footer Controls & Keypad */
+.phone-footer {
+  padding: 10px 14px 14px;
+  background: #0b101d;
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 3x4 Keypad Grid */
+.phone-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.key-btn {
+  background: var(--key-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  height: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.key-btn:hover {
+  background: var(--key-hover);
+}
+
+.key-btn:active {
+  background: var(--key-active);
+  transform: scale(0.95);
+}
+
+.key-btn .num {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.key-btn .sub {
+  font-size: 8px;
+  color: var(--primary-green);
+  font-weight: 600;
+  margin-top: 1px;
+  height: 10px;
+}
+
+/* Fallback Text Input */
+.phone-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.phone-input-row input {
+  flex: 1;
+  background: var(--phone-screen);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: #fff;
+  outline: none;
+}
+
+.phone-input-row input:focus {
+  border-color: var(--primary-green);
+}
+
+.phone-input-row .send-btn {
+  background: var(--primary-green-dark);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Call Action Buttons Bar */
+.phone-call-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 2px;
+}
+
+.action-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.2s;
+}
+
+.action-circle:active {
+  transform: scale(0.92);
+}
+
+.mic-circle {
+  background: var(--key-bg);
+  color: #fff;
+  border: 1px solid var(--card-border);
+}
+
+.mic-circle.listening {
+  background: var(--primary-green);
+  box-shadow: 0 0 12px var(--primary-green-glow);
+  animation: pulse 1.5s infinite;
+}
+
+.end-circle {
+  background: var(--danger-red);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.end-circle:hover {
+  background: var(--danger-red-dark);
+}
