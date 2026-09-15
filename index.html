@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Swara-Marg — Voice Assistant</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Swara-Marg — स्वर-मार्ग</h1>
+<div class="subtitle">Guided Voice Assistant: Step-by-step spoken conversation for training & job matching.</div>
+
+<!-- Live Call & Step Indicator Banner -->
+<div class="call-header">
+  <div>
+    <span id="stepBadge" class="step-badge">Step 1 of 4</span>
+    <span id="callStatus" class="call-status">Click Speak Answer or listen</span>
+  </div>
+  <div class="lang-selector">
+    <select id="langSelect" onchange="onLanguageChange()" title="Select Language">
+      <option value="en-IN">English (en-IN)</option>
+      <option value="hi-IN">हिंदी (hi-IN)</option>
+    </select>
+  </div>
+</div>
+
+<div id="chatlog"></div>
+
+<!-- Large Text Recommendation Card (Step 5 Result Backup) -->
+<div id="resultCard" class="result-card">
+  <h3 id="cardHeader">🎓 Recommended Skill Course & Jobs</h3>
+  <div id="cardCourse" class="course-title"></div>
+  <div id="cardCenter" class="detail-item"></div>
+  <div id="cardDemand" class="detail-item"></div>
+</div>
+
+<div class="inputrow">
+  <input id="userInput" type="text" placeholder="Type your answer or use microphone..." />
+  <button id="micBtn" class="mic-btn" type="button" onclick="toggleListening()" title="Voice Input">🎤 Speak Answer</button>
+  <button id="sendBtn" class="send-btn" onclick="handleSend()">Send Answer</button>
+</div>
+
+<h2>Officer Dashboard (Session Submissions)</h2>
+<table id="dashTable">
+  <thead>
+    <tr><th>Time</th><th>Skills</th><th>District</th><th>Matched Course</th><th>Job Demand</th></tr>
+  </thead>
+  <tbody id="dashBody"></tbody>
+</table>
+<div id="emptyNote" class="empty">No submissions yet.</div>
+
+<script src="data.js"></script>
+<script src="matching.js"></script>
+<script src="groq.js"></script>
+<script src="voice.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
